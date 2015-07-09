@@ -2,6 +2,7 @@ package com.acme;
 
 import java.awt.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,43 +61,45 @@ public class JpaTutorialApplicationTests {
 		
 	}
 	
-	@Test
-	public void dataLoads(){
-		
-		CustomerType cType1 = new CustomerType();
-		cType1.setName("Indywidualny");
-		
-		CustomerType cType2 = new CustomerType();
-		cType2.setName("Inny");
-		
-		customerTypeRepository.save(Lists.newArrayList(cType1,cType2));
-		
-		
-		Customer customer1 = new Customer(null, "John Smith", "john@smith.com", "Lodz, Jaracza 74",cType1);
-		Customer customer2 = new Customer(null, "Jan Kowalski", "jan@kowalski.pl", "Lodz, Piotrkowska 100",cType2);
-		
-		customerRepository.save(Lists.newArrayList(customer1,customer2));
-		PizzaOrder pizzaOrder1 = new PizzaOrder(customer1, PizzaType.LARGE);
-		PizzaOrder pizzaOrder2 = new PizzaOrder(customer2, PizzaType.BIG);
-		
-		
-		orderRepository.save(Lists.newArrayList(pizzaOrder1,pizzaOrder2));
-	}
-	
-//	@Test 
-//	public void saveOrder(){
-//		Customer customer1 = new Customer(null, "John Smith", "john@smith.com", "Lodz, Jaracza 74");
-//		Customer customer2 = new Customer(null, "Jan Kowalski", "jan@kowalski.pl", "Lodz, Piotrkowska 100");
+//	@Test
+//	public void dataLoads(){
 //		
-////		Long orderId1 = pizzaOrderService.createOrder(customer1, PizzaType.LARGE);
-////		Long orderId2 = pizzaOrderService.createOrder(customer2, PizzaType.SMALL);
-////		
+//		CustomerType cType1 = new CustomerType();
+//		cType1.setName("Indywidualny");
+//		
+//		CustomerType cType2 = new CustomerType();
+//		cType2.setName("Inny");
+//		
+//		customerTypeRepository.save(Lists.newArrayList(cType1,cType2));
+//		
+//		
+//		Customer customer1 = new Customer(null, "John Smith", "john@smith.com", "Lodz, Jaracza 74",cType1);
+//		Customer customer2 = new Customer(null, "Jan Kowalski", "jan@kowalski.pl", "Lodz, Piotrkowska 100",cType2);
+//		
+//		customerRepository.save(Lists.newArrayList(customer1,customer2));
 //		PizzaOrder pizzaOrder1 = new PizzaOrder(customer1, PizzaType.LARGE);
 //		PizzaOrder pizzaOrder2 = new PizzaOrder(customer2, PizzaType.BIG);
 //		
 //		
 //		orderRepository.save(Lists.newArrayList(pizzaOrder1,pizzaOrder2));
 //	}
+	
+	@Test 
+	public void findOne(){				
+		CustomerType customerType = customerTypeRepository.findOne((long) 1);
+		
+		
+		Customer customer1 = new Customer(null, "Tomasz Nowak", "test@wp.pl", "Lodz, Jaracza 74",customerType);
+		
+		Customer temp= customerRepository.save(customer1);
+		
+		
+		Customer fromDataBase = customerRepository.findIndividual(temp.getId());
+
+		Assert.assertTrue(temp.getId()
+				.equals(fromDataBase.getId()));
+		
+	}
 	
 	
 
